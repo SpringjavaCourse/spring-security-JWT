@@ -22,6 +22,12 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Autowired
     private UserRepository userRepository;
 
+    /**
+     * Obtiene los detalles del usuario de la base de datos
+     * @param username
+     * @return
+     * @throws UsernameNotFoundException
+     */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         com.example.demo.domain.User user = userRepository.findByUsername(username)
