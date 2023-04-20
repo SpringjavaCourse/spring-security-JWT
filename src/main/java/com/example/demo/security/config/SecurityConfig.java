@@ -37,6 +37,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     // ================ CREACIÓN DE BEANS ====================== //
     @Bean
     public JwtRequestFilter authenticationJwtTokenFilter() {
+
         return new JwtRequestFilter();
     }
 
@@ -68,7 +69,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return source;
     }
 
-    // ========================= OVERRIDE: SOBREESCRIBIR FUNCIONALIDAD SECURITY POR DEFECTO ======
+    // ========================= OVERRIDE: SOBREESCRIBIR FUNCIONALIDAD SECURITY POR DEFECTO ======//
     @Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
@@ -79,15 +80,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         // Cross-Site Request Forgery CSRF
         // CORS (Cross-origin resource sharing)
         http.cors().and().csrf().disable()
-                .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-                .authorizeRequests().antMatchers("/api/auth/**").permitAll()
-                .antMatchers("/v2/api-docs", "/configuration/**", "/swagger*/**", "/webjars/**").permitAll()
-                .antMatchers("/api/hello/**").permitAll()
-                .antMatchers("/").permitAll()
+                .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and() // manejo de excepciones
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and() // sin sesiones
+                .authorizeRequests().antMatchers("/api/auth/**").permitAll()// permitir acceso a rutas
+                .antMatchers("/v2/api-docs", "/configuration/**", "/swagger*/**", "/webjars/**").permitAll() // permitir acceso a rutas
+                .antMatchers("/api/hello/**").permitAll() // permitir acceso a rutas
+                .antMatchers("/").permitAll() // permitir acceso a rutas
                 .anyRequest().authenticated();
 
-        http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class); // agregar filtro antes del UsernamePasswordAuthenticationFilter
     }
 
 }
